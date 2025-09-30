@@ -25,9 +25,9 @@ WIND_UNIT = "kmh"
 PRESSURE_UNIT = "hPa"
 
 
-#===============================
+#====================
 # CONVERSION HELPERS
-#===============================
+#=====================
 def temp_to_display(raw_c: Optional[float]) -> Optional[float]:
     if raw_c is None:
         return None

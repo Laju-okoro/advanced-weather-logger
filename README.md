@@ -35,9 +35,9 @@ project/
 
 ⚡ Installation
 
-Clone this repository:
+Clone this Repository:
 
-git clone https://github.com/your-username/weather-logger.git
+git clone https://github.com/Laju-okoro/advanced-weather-logger.git
 cd weather-logger
 
 
