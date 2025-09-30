@@ -104,7 +104,6 @@ def format_humidity(raw_h: Optional[float]) -> str:
     if raw_h is None:
         return "[yellow]N/A[/yellow]"
     try:
-        print("DEBUG humidity value:", repr(raw_h))
         return f"[green]{raw_h:.0f}%[/green]"
     except Exception:
         return escape(str(raw_h))
@@ -316,7 +315,6 @@ def log_weather(city: Optional[str] = None, latitude: Optional[float] = None, lo
          print(Fore.RED + f"⚠️ DATABASE ERROR WHILE LOGGING: {e}")
          log_error("log_weather", str(e))
      except Exception as e:
-        print(f"DEBUG: Unexpected error caught -- {e}")
         print(Fore.RED + f"⚠️ UNEXPECTED ERROR WHILE LOGGING: {e}")
         log_error("log_weather_unexpected", str(e))
 
@@ -346,8 +344,7 @@ def view_logs(limit: Optional[int] = None, search_city: Optional[str] = None, se
             sql += f" LIMIT {int(limit)}"
         cur.execute(sql, params)
         rows = cur.fetchall()
-        for i, row in enumerate(rows[:5]):
-            print("DEBUG row sample:", i, repr(row))
+        
         if not rows:
             console.print("\n📭 [bold yellow]NO WEATHER LOGS YET.[/]")
             return
