@@ -1,3 +1,14 @@
+🌦️ Advanced Weather Logger & 😂 Joke API Saver
+
+This repository contains two Python projects that demonstrate working with APIs, SQLite databases, and Python libraries for creating practical applications:
+
+   1. Advanced Weather Logger → Logs real-time weather data with rich-colored tables, CSV export, and error tracking.
+
+   2. Joke API Saver → Fetches random jokes from the Official Joke API and saves them into a SQLite database.
+
+
+
+
 🌦️ Advanced Weather Logger
 
 A Python application that fetches live weather data using the Open-Meteo API
@@ -215,3 +226,78 @@ Development / Contribution
 Add new features in feature branches, open PRs.
 
 Suggested improvements: add hourly logging job, include precipitation, add a web dashboard.
+
+
+
+
+# Joke Saver App 😂
+
+A simple Python script that fetches jokes from the **[Official Joke API](https://official-joke-api.appspot.com/)** and saves them into a **SQLite database**.  
+Each time you run it, at least **5 jokes** are stored (duplicates are skipped automatically).  
+You can also view all jokes saved so far in your local database.
+
+---
+
+## 📌 Features
+- Fetches **10 random jokes** from the API, saves the first 5.
+- Uses **SQLite** for lightweight local storage (`jokes.db`).
+- Prevents **duplicate jokes** with a unique `api_id`.
+- Displays all saved jokes in the terminal with timestamps.
+
+---
+
+## 🛠️ Requirements
+- Python 3.9+
+- Libraries:
+  - `requests` (for API calls)
+  - `sqlite3` (built-in with Python)
+
+---
+
+## 🚀 Usage
+
+1. Clone or download this project.
+2. Install dependencies (if not installed already):
+   ```bash
+   pip install requests
+Run the script:
+
+bash
+Copy code
+python jokes.py
+
+
+📂 Database Schema
+The SQLite database (jokes.db) contains a single table:
+
+Column	Type	Description
+id	INTEGER	Primary key (auto-incremented)
+api_id	INTEGER	Unique joke ID from the API
+type	TEXT	Category of the joke (e.g. "general")
+setup	TEXT	The question or setup of the joke
+punchline	TEXT	The punchline of the joke
+fetched_at	TEXT	Timestamp when the joke was saved
+
+📖 Example Output
+scss
+Copy code
+✅ 5 new jokes saved into jokes.db
+
+--- Saved Jokes ---
+[1] (general) Why don’t scientists trust atoms? - Because they make up everything. (saved at 2025-09-26 15:12:33)
+[2] (programming) Why do programmers prefer dark mode? - Because light attracts bugs. (saved at 2025-09-26 15:12:33)
+
+
+📝 Notes
+If you run the script multiple times, duplicate jokes are skipped.
+
+Database file (jokes.db) is created in the same directory as the script.
+
+You can open the database with any SQLite viewer (e.g., DB Browser for SQLite).
+
+📌 Future Improvements
+Search jokes by keyword.
+
+Export jokes to CSV/JSON.
+
+Add a CLI or web interface.
