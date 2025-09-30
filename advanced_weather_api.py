@@ -8,6 +8,7 @@ from rich.console import Console
 from rich.table import Table
 from rich.prompt import Prompt
 from rich.spinner import Spinner
+from rich.text import Text
 from rich.markup import escape
 from typing import Optional, Union
 import time
@@ -454,6 +455,51 @@ def log_error(context, message):
         except Exception:
             pass
 
+
+
+def view_error_logs(limit: int = 50):
+    """
+    Show recent entries from the error_log table in the DB.
+    Call from menu option 7.
+    """
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT ID, WHEN_TS, CONTEXT, MESSAGE
+            FROM ERROR_LOG
+            ORDER BY WHEN_TS DESC
+            LIMIT ?
+        """, (limit,))
+        rows = cur.fetchall()
+        conn.close()
+
+        if not rows:
+            console.print("[yellow]📭 NO ERROR LOGS FOUND.[/yellow]")
+            return
+
+        table = Table(title="❌ ERROR LOG (MOST RECENT FIRST)")
+        table.add_column("ID", style="cyan", justify="right")
+        table.add_column("WHEN (UTC)", style="green")
+        table.add_column("CONTEXT", style="magenta")
+        table.add_column("MESSAGE", style="red")
+
+        for _id, when_ts, context, message in rows:
+        # escape any markup characters so Rich treats them as literal text
+            ctx_safe = escape(str(context)) if context is not None else ""
+            msg_safe = escape(str(message)) if message is not None else ""
+            table.add_row(
+                str(_id),
+                str(when_ts),
+                ctx_safe,
+                msg_safe
+            )
+
+        console.print(table)
+
+    except Exception as e:
+        console.print(f"⚠️ Unable to read error_log: {e}", style="bold red")
+
 #===============
 # CLI MENU
 #===============
@@ -475,9 +521,10 @@ def main():
         console.print("3. VIEW LOGS (LATEST 20)")
         console.print("4. SEARCH LOGS BY CITY/DATE")
         console.print("5. EXPORT LOGS TO CSV")
-        console.print("6. EXIT")
+        console.print("6. VIEW ERROR LOGS")
+        console.print("7. EXIT")
     
-        choice = input(Fore.CYAN + "CHOOSE AN OPTION (1-6): ").strip()
+        choice = input(Fore.CYAN + "CHOOSE AN OPTION (1-7): ").strip()
 
         if choice == "1":
             with console.status("[bold green]Fetching Weather...[/]", spinner="earth"):
@@ -503,6 +550,9 @@ def main():
             export_to_csv()
 
         elif choice == "6":
+            view_error_logs()
+
+        elif choice == "7":
             console.print("👋 GOODBYE", style="bold red")
             break
         else:
@@ -511,3 +561,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
